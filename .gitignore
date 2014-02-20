@@ -1,0 +1,17 @@
+#ignore thumbnails created by windows
+Thumbs.db
+*.tmp
+*.bak
+*.log
+#ignore thumbnails created by MAC
+*.DS_Store
+
+# netbeans project dir
+nbproject/
+
+# local scripts, reports...
+build/
+reports/
+archive/
+
+config.js

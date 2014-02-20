@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>GST Browser</title>
+</head>
+<body>
+<!--[if lt IE 9]><p class="msieWarning i18n">MSIE 9 or lower is not supported</p><![endif]-->
+<div id="header">
+    <p><button id="butUpload" class="i18n" title="Upload">Upload</button>
+        <button id="butMkdir" class="i18n" title="MakeDir">MakeDir</button>
+        <button id="butDelete" class="i18n" title="Delete">Delete</button>
+        <button id="butRename" class="i18n" title="Rename">Rename</button>
+        <button id="butCopy" class="i18n" title="Copy/Move">Copy</button></p>
+    <p><select id="fldView"><option value="thumbs" class="i18n">View as thumbnails</option><option value="list" class="i18n">View as list</option></select>
+        <input type="search" id="fldFilter" placeholder="Search:" class="i18n" /></p>
+</div>
+<div id="tree"></div>
+<div id="folder"></div>
+<div id="footer">
+    <p><button id="butOk" class="i18n">OK</button><button id="butStorno" class="i18n">Storno</button></p>
+    <div id="selectedFile"></div>
+</div>
+<div class="panel hidden" id="panelDelete">
+    <div class="dialog">
+        <p><span class="i18n">Are you sure to delete</span> <span data-showpath=""></span>/<span data-showfile=""></span>?</p>
+        <p><button id="butSubmitDelete" class="i18n">Delete</button> <button class="close i18n" data-action-closepanel="panelDelete">Storno</button></p>
+    </div>
+</div>
+<div class="panel hidden" id="panelMkdir">
+    <div class="dialog">
+        <p><span class="i18n">Create folder</span> <span data-showpath=""></span>/<input type="text" name="newdir" value="" /></p>
+        <p><button id="butSubmitMkdir" class="i18n">Create</button> <button class="close i18n" data-action-closepanel="panelMkdir">Storno</button></p>
+    </div>
+</div>
+<div class="panel hidden" id="panelRename">
+    <div class="dialog">
+        <p><span data-showpath=""></span>/<span data-showfile=""></span> <span class="i18n">Rename to:</span> <input type="text" name="new" value="" /></p>
+        <p><button id="butSubmitRename" class="i18n">Rename</button> <button class="close i18n" data-action-closepanel="panelRename">Storno</button></p>
+    </div>
+</div>
+<div class="panel hidden" id="panelUpload">
+    <div class="dialog">
+        <p><label for="fldUpload" class="i18n">File(s):</label> <input type="file" id="fldUpload" /></p>
+        <table border="1">
+        <thead>
+        <tr>
+            <th class="i18n">Filename</th>
+            <th class="i18n">Size</th>
+            <th class="i18n">Progress</th>
+            <th class="i18n">Result</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+        <p><button class="close i18n" data-action-closepanel="panelUpload">Close</button></p>
+    </div>
+</div>
+<div class="panel hidden" id="panelCopy">
+    <div class="dialog">
+        <p><span data-showpath=""></span>/<span data-showfile=""></span>
+            <select name="action"><option value="copy" class="i18n">copy to:</option><option value="move" class="i18n">move to:</option></select>
+            <input type="text" name="new" value="" /></p>
+        <p><button id="butSubmitCopy" class="i18n">OK</button> <button class="close i18n" data-action-closepanel="panelCopy">Storno</button></p>
+    </div>
+</div>
+<div id="msg" class="hidden"><span></span><button class="i18n">Close</button></div>
+<script src="js/browser.js"></script>
+</body>
+</html>

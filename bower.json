@@ -1,0 +1,20 @@
+{
+  "name": "gstbrowser",
+  "version": "0.0.0",
+  "authors": [
+    "Zdenek Gebauer <zdenek.gebauer@gmail.com>"
+  ],
+  "description": "filemanager for TinyMCE, CKEditor and web apps",
+  "main": "index.htm",
+  "keywords": [
+    "filemanager",
+    "TinyMCE",
+    "CKEditor",
+    "filebrowser"
+  ],
+  "license": "WTFPL",
+  "homepage": "http://github TODO",
+  "ignore": [
+    "demo"
+  ]
+}
