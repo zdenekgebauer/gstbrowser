@@ -13,8 +13,10 @@
     "filebrowser"
   ],
   "license": "WTFPL",
-  "homepage": "http://github TODO",
+  "homepage": "https://github.com/zdenekgebauer/gstbrowser",
   "ignore": [
+    ".gitattributes",
+    ".gitignore",
     "demo"
   ]
 }
