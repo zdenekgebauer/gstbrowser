@@ -492,7 +492,13 @@ GstBrowser.FileBrowser = function (config) {
         xhr.onreadystatechange = function () {
             if (this.readyState === 4) {
                 if (this.status === 200) {
-                    callback(JSON.parse(this.responseText));
+                    try {
+                        var data = JSON.parse(this.responseText);
+                    } catch(e) {
+                        showErr('ErrLoad');
+                        return;
+                    }
+                    callback(data);
                 } else {
                     showErr('ErrLoad');
                 }
@@ -515,7 +521,7 @@ GstBrowser.FileBrowser = function (config) {
     var handlePassUrl = function () {
         if (!butOk.disabled) {
             if (config.callbackSubmit !== null) {
-                config.callbackSubmit(config.baseUrl  +  selectedPath + '/' + selectedFile.name);
+                config.callbackSubmit(config.baseUrl  +  '/' + selectedPath + (selectedPath !== '' ? '/' : '') + selectedFile.name);
             }
         }
     };
