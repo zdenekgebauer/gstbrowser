@@ -405,6 +405,7 @@ GstBrowser.FileBrowser = function (config) {
                 setFile('');
             }
             panelDelete.classList.add('hidden');
+            return;
         }
         showErr('ErrDelete' + data.msg);
     };
