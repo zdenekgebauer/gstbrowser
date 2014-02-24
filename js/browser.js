@@ -556,6 +556,8 @@ GstBrowser.FileBrowser = function (config) {
     butMkDir.addEventListener('mousedown', function () {
         panelMkDir.querySelector('input[type="text"]').value = '';
         panelMkDir.classList.remove('hidden');
+        // hack for FF and chrome
+        setTimeout(function() { panelMkDir.querySelector('input[type="text"]').focus(); }, 0);
     });
     butMkDirSubmit.addEventListener('mousedown', mkDir);
 
@@ -569,6 +571,8 @@ GstBrowser.FileBrowser = function (config) {
             return;
         }
         panelRename.classList.remove('hidden');
+        // hack for FF and chrome
+        setTimeout(function() { panelRename.querySelector('input[type="text"]').focus(); }, 0);
     });
     butRenameSubmit.addEventListener('mousedown', rename);
 
@@ -577,6 +581,8 @@ GstBrowser.FileBrowser = function (config) {
             return;
         }
         panelCopy.classList.remove('hidden');
+        // hack for FF and chrome
+        setTimeout(function() { panelCopy.querySelector('input[type="text"]').focus(); }, 0);
     });
     butCopySubmit.addEventListener('mousedown', copy);
 
