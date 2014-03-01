@@ -126,13 +126,7 @@ GstBrowser.FileBrowser = function (config) {
         nodeTree.querySelector('span.folder').classList.add('selected');
 
         Array.prototype.forEach.call(nodeTree.querySelectorAll('span.folder'), function (el) {
-            el.addEventListener('mousedown', function (event) {
-
-                Array.prototype.forEach.call(nodeTree.querySelectorAll('span.folder'), function (el) {
-                    el.classList.remove('selected');
-                });
-                el.classList.add('selected');
-
+            el.addEventListener('mousedown', function () {
                 var currentItem = el.parentNode;
                 var path = currentItem.getAttribute('data-path');
                 while(currentItem.parentNode) {
@@ -326,6 +320,28 @@ GstBrowser.FileBrowser = function (config) {
 
     var setPath = function (path) {
         selectedPath = path;
+
+        Array.prototype.forEach.call(nodeTree.querySelectorAll('span.folder'), function (el) {
+            el.classList.remove('selected');
+        });
+
+        // unfold branches
+        var parts = selectedPath.split('/');
+        var selector = 'ul';
+        for(var i=0; i<parts.length-1; i++) {
+            for(var y=0; y<i; y++) {
+                selector += ' ul';
+            }
+            nodeTree.querySelector(selector + ' li[data-path="' + parts[y] + '"]').classList.remove('collapsed');
+        }
+
+        // highlight tree item
+        selector = 'ul';
+        for(var y=0; y<parts.length; y++) {
+            selector += ' ul';
+        }
+        nodeTree.querySelector(selector + ' li[data-path="' + parts[parts.length-1] + '"] span.folder').classList.add('selected');
+
         Array.prototype.forEach.call(document.querySelectorAll('[data-showpath]'), function (el) {
             el.innerHTML = selectedPath;
         });
@@ -520,11 +536,17 @@ GstBrowser.FileBrowser = function (config) {
     };
 
     var handlePassUrl = function () {
+        if (selectedFile.type === 'dir') {
+            setPath(selectedPath + '/' + selectedFile.name);
+            return;
+        }
+
         if (!butOk.disabled) {
             if (config.callbackSubmit !== null) {
-                config.callbackSubmit(config.baseUrl  +  '/' + selectedPath + (selectedPath !== '' ? '/' : '') + selectedFile.name);
+                config.callbackSubmit(config.baseUrl + '/' + selectedPath + (selectedPath !== '' ? '/' : '') + selectedFile.name);
             }
         }
+
     };
 
     butOk.addEventListener('mousedown', handlePassUrl);
