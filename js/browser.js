@@ -320,27 +320,32 @@ GstBrowser.FileBrowser = function (config) {
 
     var setPath = function (path) {
         selectedPath = path;
-
         Array.prototype.forEach.call(nodeTree.querySelectorAll('span.folder'), function (el) {
             el.classList.remove('selected');
         });
 
         // unfold branches
         var parts = selectedPath.split('/');
-        var selector = 'ul';
-        for(var i=0; i<parts.length-1; i++) {
-            for(var y=0; y<i; y++) {
+
+        for (var i=0; i<parts.length; i++) {
+            var selector = 'ul';
+            for (var y=0; y<i; y++) {
                 selector += ' ul';
             }
             nodeTree.querySelector(selector + ' li[data-path="' + parts[y] + '"]').classList.remove('collapsed');
         }
 
         // highlight tree item
-        selector = 'ul';
-        for(var y=0; y<parts.length; y++) {
-            selector += ' ul';
+        if (selectedPath === '') {
+            nodeTree.querySelector('ul li[data-path=""] span.folder').classList.add('selected');
+        } else {
+            selector = 'ul';
+            for(var y=0; y<parts.length-1; y++) {
+                selector += ' ul';
+            }
+            nodeTree.querySelector(selector + ' li[data-path="' + parts[parts.length-1] + '"] span.folder').classList.add('selected');
         }
-        nodeTree.querySelector(selector + ' li[data-path="' + parts[parts.length-1] + '"] span.folder').classList.add('selected');
+
 
         Array.prototype.forEach.call(document.querySelectorAll('[data-showpath]'), function (el) {
             el.innerHTML = selectedPath;
