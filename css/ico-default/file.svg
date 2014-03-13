@@ -1,0 +1,21 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+ <metadata>image/svg+xml</metadata>
+ <defs>
+  <linearGradient x1="0.76761" y1="-0.22822" x2="-0.23239" y2="0.77178" id="linearGradient3018">
+   <stop offset="0" stop-color="#DADADA"/>
+   <stop offset="0.349" stop-color="#F1F1F1"/>
+   <stop offset="1" stop-color="#F0F0F0"/>
+  </linearGradient>
+  <linearGradient x1="1.12258" y1="1.50264" x2="-1.07482" y2="-0.48496" id="linearGradient3028">
+   <stop offset="0" stop-color="#DADADA"/>
+   <stop offset="0.349" stop-color="#F1F1F1"/>
+   <stop offset="1" stop-color="#F0F0F0"/>
+  </linearGradient>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_1" fill="url(#linearGradient3018)" stroke-width="0.25" stroke="#000" stroke-opacity="0.3648" d="m4.5,0.145l0,99.6l90.8,0l0,-74.7l-22.7,-24.9l-68.1,0z"/>
+  <path id="svg_2" d="m95,24.8c-3.23,-0.887 -7.03,-1.34 -11.3,-1.34c-3.45,0 -7.09,0.304 -10.5,0.876c1.22,-7.94 1.13,-17 -0.226,-23.7l22,24.2l0.026,-0.036z" fill="url(#linearGradient3028)"/>
+  <path id="svg_3" d="m72.7,0.215l22.60001,24.8c-3.56001,-1.03 -7.64,-1.45 -11.7,-1.45c-3.73,0 -7.43999,0.354 -10.7,0.905c1.3,-7.4 1.4,-16.8 -0.2,-24.3m22.60001,24.8c0.047,0.014 0.09499,0.027 0.142,0.042l-0.09,0.015l-0.05199,-0.057m-22.10001,-23.8c1.27,6.67 1.34,15.4 0.168,23.2c3.4,-0.558 6.98,-0.852 10.4,-0.852c4.1,0 7.76,0.413 10.9,1.23l-21.5,-23.5l0.032,-0.078z" fill="#8e8e8e"/>
+ </g>
+</svg>

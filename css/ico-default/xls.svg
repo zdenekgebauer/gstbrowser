@@ -1,0 +1,28 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+ <metadata>image/svg+xmlimage/svg+xml</metadata>
+ <defs>
+  <linearGradient x1="0.53517" y1="0.13207" x2="-0.46707" y2="1.11305" id="linearGradient3043">
+   <stop offset="0" stop-color="#DADADA"/>
+   <stop offset="0.349" stop-color="#F1F1F1"/>
+   <stop offset="1" stop-color="#F0F0F0"/>
+  </linearGradient>
+  <linearGradient x1="1.10612" y1="1.50662" x2="-1.06603" y2="-0.47984" id="linearGradient3053">
+   <stop offset="0" stop-color="#DADADA"/>
+   <stop offset="0.349" stop-color="#F1F1F1"/>
+   <stop offset="1" stop-color="#F0F0F0"/>
+  </linearGradient>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_1" fill="url(#linearGradient3043)" stroke-width="0.25" stroke="#000" stroke-opacity="0.3648" d="m4.5,0.145l0,99.6l90.8,0l0,-74.7l-22.7,-24.9l-68.1,0z"/>
+  <path id="svg_2" d="m95,24.8c-3.23,-0.887 -7.03,-1.34 -11.3,-1.34c-3.45,0 -7.09,0.304 -10.5,0.876c1.2,-8 1.10001,-17 -0.3,-23.8l22,24.2l0.1,0.064z" fill="url(#linearGradient3053)"/>
+  <path id="svg_3" d="m72.7,0.215l22.60001,24.8c-3.56001,-1.03 -7.64,-1.45 -11.7,-1.45c-3.73,0 -7.43999,0.354 -10.7,0.905c1.3,-7.4 1.4,-16.8 -0.2,-24.3m22.60001,24.8c0.047,0.014 0.096,0.027 0.143,0.042l-0.09,0.015l-0.05299,-0.057m-22,-23.7c1.27,6.67 1.34,15.4 0.168,23.2c3.39999,-0.558 6.98,-0.852 10.39999,-0.852c4.10001,0 7.76,0.413 10.9,1.23l-21.5,-23.5l0.03201,-0.078z" fill="#8e8e8e"/>
+  <line id="svg_4" fill="none" x1="13.5" x2="85.5" stroke-miterlimit="4" stroke="#000" y1="31.5" y2="31.5" stroke-width="2"/>
+  <line id="svg_5" fill="none" x1="13.6" x2="73.8" stroke-miterlimit="4" stroke="#000" y1="13.5" y2="13.5" stroke-width="2.11"/>
+  <line id="svg_6" fill="none" x1="13.5" x2="85.5" stroke-miterlimit="4" stroke="#000" y1="49.5" y2="49.5" stroke-width="2"/>
+  <line id="svg_7" fill="none" x1="13.5" x2="85.5" stroke-miterlimit="4" stroke="#000" y1="67.5" y2="67.5" stroke-width="2"/>
+  <line id="svg_8" fill="none" x1="14.5" y1="68.7" stroke-miterlimit="4" stroke="#000" x2="14.5" y2="12.7" stroke-width="1.76"/>
+  <line id="svg_9" fill="none" y2="23.4" x2="85" stroke-miterlimit="4" stroke="#000" y1="68.3" x1="85" stroke-width="1.58"/>
+  <line id="svg_10" fill="none" x1="46.4" y1="68.6" stroke-miterlimit="4" stroke="#000" x2="46.4" y2="12.6" stroke-width="1.76"/>
+ </g>
+</svg>
