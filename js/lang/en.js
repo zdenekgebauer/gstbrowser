@@ -8,6 +8,7 @@ GstBrowser.Translations = {
     'ErrCopy51': 'File already exists',
     'ErrCopy52': 'Target folder not found',
     'ErrDelete': 'Cannot delete',
+    'ErrDelete40': 'Cannot delete',
     'ErrDelete41': 'Folder is not empty',
     'ErrLoadTree': 'Cannot load folders',
     'ErrLoadFiles': 'Cannot load files',

@@ -109,7 +109,7 @@ GstBrowser.FileBrowser = function (config) {
             refreshTree();
             return;
         }
-        showErr('ErrLoadTree' + data.msg);
+        showErr('ErrLoadTree' + data.err);
     };
 
     var refreshTree =  function () {
@@ -218,7 +218,7 @@ GstBrowser.FileBrowser = function (config) {
             refreshFiles();
             return;
         }
-        showErr('ErrLoadFiles' + data.msg);
+        showErr('ErrLoadFiles' + data.err);
     };
 
     var refreshFiles = function () {
@@ -408,7 +408,7 @@ GstBrowser.FileBrowser = function (config) {
             panelMkDir.classList.add('hidden');
             return;
         }
-        showErr('ErrMkDir' + data.msg);
+        showErr('ErrMkDir' + data.err);
     };
 
     var del = function () {
@@ -428,7 +428,7 @@ GstBrowser.FileBrowser = function (config) {
             panelDelete.classList.add('hidden');
             return;
         }
-        showErr('ErrDelete' + data.msg);
+        showErr('ErrDelete' + data.err);
     };
 
     var rename = function () {
@@ -445,8 +445,9 @@ GstBrowser.FileBrowser = function (config) {
                 refreshFiles();
             }
             panelRename.classList.add('hidden');
+            return;
         }
-        showErr('ErrRename' + data.msg);
+        showErr('ErrRename' + data.err);
     };
 
 
@@ -464,8 +465,9 @@ GstBrowser.FileBrowser = function (config) {
                 refreshFiles();
             }
             panelCopy.classList.add('hidden');
+            return;
         }
-        showErr('ErrCopy' + data.msg);
+        showErr('ErrCopy' + data.err);
     };
 
     var formatFilesize = function (bytes) {
@@ -597,6 +599,7 @@ GstBrowser.FileBrowser = function (config) {
         if (selectedFile === '') {
             return;
         }
+        panelRename.querySelector('input[type="text"]').value = '';
         panelRename.classList.remove('hidden');
         // hack for FF and chrome
         setTimeout(function() { panelRename.querySelector('input[type="text"]').focus(); }, 0);

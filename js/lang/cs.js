@@ -19,6 +19,7 @@ GstBrowser.Translations = {
     'ErrCopy51': 'Soubor už existuje',
     'ErrCopy52': 'Cílová složka nenalezena',
     'ErrDelete': 'Smazání se nepodařilo provést',
+    'ErrDelete40': 'Smazání se nepodařilo provést',
     'ErrDelete41': 'Adresář není prázdný',
     'ErrLoad': 'Nepodařilo se načíst data',
     'ErrLoadFiles': 'Nepodařilo se načíst soubory',

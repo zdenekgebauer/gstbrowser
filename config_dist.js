@@ -12,6 +12,8 @@ GstBrowser.Config = {
         configServer: 'default',
         /** language file */
         lang: 'cs',
+        /** css file */
+        css: 'css/default.css',
         /** filetypes accepted for upload  */
         uploadAccept: '',
         /** max size of file for upload (in bytes) */
