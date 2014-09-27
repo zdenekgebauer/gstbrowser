@@ -10,13 +10,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 GstBrowser.init = function () {
+    var match, configSection, lang, currentConfig, css, script;
     // parse parameters from url
-    var match = /[\?&]config=([^&]+)/i.exec(window.location.search);
-    var configSection = (match && match.length > 1 ? decodeURIComponent(match[1]) : 'default');
+    match = /[\?&]config=([^&]+)/i.exec(window.location.search);
+    configSection = (match && match.length > 1 ? decodeURIComponent(match[1]) : 'default');
     match = /[\?&]lang=([^&]+)/i.exec(window.location.search);
-    var lang = (match && match.length > 1 ? decodeURIComponent(match[1]) : 'en');
+    lang = (match && match.length > 1 ? decodeURIComponent(match[1]) : 'en');
 
-    var currentConfig = (GstBrowser.Config[configSection] !== undefined ? GstBrowser.Config[configSection] : null);
+    currentConfig = (GstBrowser.Config[configSection] !== undefined ? GstBrowser.Config[configSection] : null);
     if (currentConfig === null) {
         alert('missing config section ' + configSection);
     } else {
@@ -31,14 +32,14 @@ GstBrowser.init = function () {
         currentConfig.callbackInit = (typeof currentConfig.callbackInit === 'function' ? currentConfig.callbackInit :  null);
         currentConfig.configServer = (typeof currentConfig.configServer !== 'undefined' ? currentConfig.configServer : null);
 
-        var css = document.createElement('link');
+        css = document.createElement('link');
         css.rel = 'stylesheet';
         css.type = 'text/css';
         css.href = currentConfig.css;
         document.getElementsByTagName('head')[0].appendChild(css);
 
         // load language
-        var script = document.createElement('script');
+        script = document.createElement('script');
         script.src = 'js/lang/' + currentConfig.lang + '.js';
         script.onload = function () {
             GstBrowser.FileBrowser(GstBrowser.Config[configSection]);
@@ -53,72 +54,69 @@ GstBrowser.init = function () {
  */
 GstBrowser.FileBrowser = function (config) {
     /** @var {String} selected path relative to root folder */
-    var selectedPath = '';
+    var selectedPath = '',
     /** @var {String} selected file or directory in current selected path */
-    var selectedFile = null;
+    selectedFile = null,
     /** @var {String} string or regexp to filter list of files */
-    var filterFile = '';
+    filterFile = '',
     /** @var {Array} list of files and dirs in current selected path */
-    var files = [];
+    files = [],
     /** @var {Array} list of all directories */
-    var tree = [];
+    tree = [],
 
-    var nodeTree = document.getElementById('tree'),
-        nodeFolder = document.getElementById('folder'),
-        nodeFolderView = document.getElementById('fldView'),
-        nodeFilter = document.getElementById('fldFilter'),
-        nodeSelFile = document.getElementById('selectedFile'),
-        nodeMsg = document.getElementById('msg'),
-        ajaxIndicator = document.getElementById('ajaxIndicator'),
+    nodeTree = document.getElementById('tree'),
+    nodeFolder = document.getElementById('folder'),
+    nodeFolderView = document.getElementById('fldView'),
+    nodeFilter = document.getElementById('fldFilter'),
+    nodeSelFile = document.getElementById('selectedFile'),
+    nodeMsg = document.getElementById('msg'),
+    ajaxIndicator = document.getElementById('ajaxIndicator'),
 
-        butRename = document.getElementById('butRename'),
-        butCopy = document.getElementById('butCopy'),
-        butOk = document.getElementById('butOk'),
-        butStorno = document.getElementById('butStorno'),
+    butOk = document.getElementById('butOk'),
+    butStorno = document.getElementById('butStorno'),
 
-        panelMkDir = document.getElementById('panelMkdir'),
-        butMkDir = document.getElementById('butMkdir'),
-        butMkDirSubmit = document.getElementById('butSubmitMkdir'),
+    panelMkDir = document.getElementById('panelMkdir'),
+    butMkDir = document.getElementById('butMkdir'),
+    butMkDirSubmit = document.getElementById('butSubmitMkdir'),
 
-        panelDelete = document.getElementById('panelDelete'),
-        butDelete = document.getElementById('butDelete'),
-        butDeleteSubmit = document.getElementById('butSubmitDelete'),
+    panelDelete = document.getElementById('panelDelete'),
+    butDelete = document.getElementById('butDelete'),
+    butDeleteSubmit = document.getElementById('butSubmitDelete'),
 
-        panelRename = document.getElementById('panelRename'),
-        butRename = document.getElementById('butRename'),
-        butRenameSubmit = document.getElementById('butSubmitRename'),
+    panelRename = document.getElementById('panelRename'),
+    butRename = document.getElementById('butRename'),
+    butRenameSubmit = document.getElementById('butSubmitRename'),
 
-        panelCopy = document.getElementById('panelCopy'),
-        butCopy = document.getElementById('butCopy'),
-        butCopySubmit = document.getElementById('butSubmitCopy'),
+    panelCopy = document.getElementById('panelCopy'),
+    butCopy = document.getElementById('butCopy'),
+    butCopySubmit = document.getElementById('butSubmitCopy'),
 
-        panelUpload = document.getElementById('panelUpload'),
-        butUpload = document.getElementById('butUpload'),
-        progressUpload = panelUpload.querySelector('tbody');
-
+    panelUpload = document.getElementById('panelUpload'),
+    butUpload = document.getElementById('butUpload'),
+    progressUpload = panelUpload.querySelector('tbody'),
 
     /** @var {String} selected folderView list/thumbs */
-    var folderView = nodeFolderView.value;
+    folderView = nodeFolderView.value,
 
-    var loadTree = function () {
+    loadTree = function () {
         ajaxSend('tree', '', handleResponseLoadTree);
-    };
+    },
 
-    var handleResponseLoadTree = function (data) {
+    handleResponseLoadTree = function (data) {
         if (data.status === 'OK') {
             tree = data.tree;
             refreshTree();
             return;
         }
         showErr('ErrLoadTree' + data.err);
-    };
+    },
 
-    var refreshTree =  function () {
-        var hasChildren = (tree[0].children !== undefined);
-        var html = '<ul><li data-path="" class="collapsed' + (!hasChildren ? ' noSubfolder' : '') + '">' + (hasChildren ? '<span class="expand"> + </span>' : '')
-             + '<span class="folder">' + tree[0].name + '</span>';
+    refreshTree =  function () {
+        var hasChildren = (tree[0].children !== undefined),
+        html = '<ul><li data-path="" class="collapsed' + (!hasChildren ? ' noSubfolder' : '') + '">' + (hasChildren ? '<span class="expand"> + </span>' : '')
+             + '<span class="folder">' + tree[0].name + '</span>', i;
         if (hasChildren) {
-            for (var i=0; i<tree[0].children.length; i++ ) {
+            for (i=0; i<tree[0].children.length; i++ ) {
                 html  += formatTreeItem(tree[0].children[i]);
             }
         }
@@ -128,8 +126,7 @@ GstBrowser.FileBrowser = function (config) {
 
         Array.prototype.forEach.call(nodeTree.querySelectorAll('span.folder'), function (el) {
             el.addEventListener('mousedown', function () {
-                var currentItem = el.parentNode;
-                var path = currentItem.getAttribute('data-path');
+                var currentItem = el.parentNode, path = currentItem.getAttribute('data-path');
                 while(currentItem.parentNode) {
                     currentItem = currentItem.parentNode;
                     if (currentItem.nodeName !== 'LI' && currentItem.nodeName !== 'UL') {
@@ -145,12 +142,10 @@ GstBrowser.FileBrowser = function (config) {
             el.addEventListener('drop', function (event) {
                 event.preventDefault();
 
-                var filename = event.dataTransfer.getData('text');
+                var filename = event.dataTransfer.getData('text'), currentItem = this,  path = '';
                 if (filename === '') { // ignore drag from filesystem
                     return false;
                 }
-                var currentItem = this;
-                var path = '';
                 while(currentItem.parentNode) {
                     currentItem = currentItem.parentNode;
                     if (currentItem.nodeName !== 'LI' && currentItem.nodeName !== 'UL') {
@@ -187,11 +182,10 @@ GstBrowser.FileBrowser = function (config) {
             });
         });
 
-
         loadFiles();
-    };
+    },
 
-    var formatTreeItem = function (treeItem) {
+    formatTreeItem = function (treeItem) {
         var hasChildren = (treeItem.children !== undefined), y, ret;
         ret = '<ul><li data-path="' + treeItem.name + '" class="collapsed' + (!hasChildren ? ' noSubfolder' : '') + '">';
         if (hasChildren) {
@@ -207,22 +201,22 @@ GstBrowser.FileBrowser = function (config) {
         }
         ret  += '</li></ul>';
         return ret;
-    };
+    },
 
-    var loadFiles = function () {
+    loadFiles = function () {
         ajaxSend('files', '', handleResponseLoadFiles);
-    };
+    },
 
-    var handleResponseLoadFiles = function (data) {
+    handleResponseLoadFiles = function (data) {
         if (data.status === 'OK') {
             files = data.files;
             refreshFiles();
             return;
         }
         showErr('ErrLoadFiles' + data.err);
-    };
+    },
 
-    var refreshFiles = function () {
+    refreshFiles = function () {
         var displayed = [], i, y, filterStrings;
 
         selectedFile = '';
@@ -259,7 +253,6 @@ GstBrowser.FileBrowser = function (config) {
             nodeFolder.innerHTML = formatFilesAsTable(displayed);
         }
 
-
         Array.prototype.forEach.call(nodeFolder.querySelectorAll('[data-file]'), function (el) {
             el.addEventListener('mousedown', function () {
                 setFile(this.getAttribute('data-file'));
@@ -272,11 +265,11 @@ GstBrowser.FileBrowser = function (config) {
             });
         });
 
-    };
+    },
 
-    var formatFilesAsThumbs = function (files) {
-        var html = '';
-        for (var i=0;i<files.length;i++) {
+    formatFilesAsThumbs = function (files) {
+        var html = '', i;
+        for (i=0;i<files.length;i++) {
             html  += '<div data-file="' + files[i].name + '" data-type="' + files[i].type
                  + '" class="thumb thumb-' + (files[i].type === 'dir' ? 'dir' : getFileExtension(files[i].name))
                  + '" draggable="' + (files[i].type === 'file' ? 'true' : 'false') + '"><span class="image">';
@@ -290,14 +283,14 @@ GstBrowser.FileBrowser = function (config) {
             html  += '</span><span class="name">' + files[i].name + '</span></div>';
         }
         return html;
-    };
+    },
 
-    var formatFilesAsTable = function (files) {
+    formatFilesAsTable = function (files) {
         var html = '<table><thead><tr><th colspan="2">' + translate('Filename') + '</th><th>' + translate('Size') + '</th><th>'
-             + translate('Dimensions') + '</th><th>' + translate('Date') + '</th></tr></thead><tbody>';
+             + translate('Dimensions') + '</th><th>' + translate('Date') + '</th></tr></thead><tbody>', i, date;
 
-        for (var i=0;i<files.length;i++) {
-            var date = new Date(files[i].date);
+        for (i=0;i<files.length;i++) {
+            date = new Date(files[i].date);
             html  += '<tr data-file="' + files[i].name + '" data-type="' + files[i].type
                  + '" draggable="' + (files[i].type === 'file' ? 'true' : 'false') + '">'
                  + '<td class="icon icon-' + (files[i].type === 'dir' ? 'dir' : getFileExtension(files[i].name))
@@ -313,13 +306,13 @@ GstBrowser.FileBrowser = function (config) {
         }
         html  += '</tbody></table>';
         return html;
-    };
+    },
 
-    var getFileExtension = function (filename) {
+    getFileExtension = function (filename) {
         return filename.split('.').pop().toLowerCase();
-    };
+    },
 
-    var setPath = function (path) {
+    setPath = function (path) {
         selectedPath = path;
         Array.prototype.forEach.call(nodeTree.querySelectorAll('span.folder'), function (el) {
             el.classList.remove('selected');
@@ -327,9 +320,8 @@ GstBrowser.FileBrowser = function (config) {
 
         // unfold branches
         nodeTree.querySelector('ul li').classList.remove('collapsed');
-        var parts = selectedPath.split('/');
-        var selector = '';
-        for (var i=0; i<parts.length; i++) {
+        var parts = selectedPath.split('/'), selector = '', i;
+        for (i=0; i<parts.length; i++) {
             selector += '[data-path="' + parts[i] +'"] ';
         }
         nodeTree.querySelector(selector).classList.remove('collapsed');
@@ -339,7 +331,7 @@ GstBrowser.FileBrowser = function (config) {
             nodeTree.querySelector('ul li[data-path=""] span.folder').classList.add('selected');
         } else {
             selector = '';
-            for (var i=0; i<parts.length; i++) {
+            for (i=0; i<parts.length; i++) {
                 selector += '[data-path="' + parts[i] +'"] ';
             }
             nodeTree.querySelector(selector + ' span.folder').classList.add('selected');
@@ -350,9 +342,10 @@ GstBrowser.FileBrowser = function (config) {
         });
         setFile('');
         loadFiles();
-    };
+    },
 
-    var setFile = function (filename) {
+    setFile = function (filename) {
+        var html, date;
         selectedFile = null;
         Array.prototype.forEach.call(nodeFolder.querySelectorAll('[data-file]'), function (el) {
             el.classList.remove('selected');
@@ -372,7 +365,7 @@ GstBrowser.FileBrowser = function (config) {
         if (selectedFile === null) {
             nodeSelFile.innerHTML = '';
         } else {
-            var html = '<div class="thumb thumb-' + (selectedFile.type === 'dir' ? 'dir' : getFileExtension(selectedFile.name)) + '">';
+            html = '<div class="thumb thumb-' + (selectedFile.type === 'dir' ? 'dir' : getFileExtension(selectedFile.name)) + '">';
             if (selectedFile.thumbnail !== null && selectedFile.thumbnail.indexOf('data:image') !== -1) {
                 html  += '<img src="' + selectedFile.thumbnail + '" alt="' + selectedFile.name + '" />';
             }
@@ -383,7 +376,7 @@ GstBrowser.FileBrowser = function (config) {
             if (selectedFile.imgsize !== null) {
                 html  += translate('Dimensions') + ':' + selectedFile.imgsize[0] + ' x ' + selectedFile.imgsize[1] + '<br />';
             }
-            var date = new Date(selectedFile.date);
+            date = new Date(selectedFile.date);
             html  += translate('Date') + ':' + date.toLocaleString() + '</p>';
             nodeSelFile.innerHTML = html;
 
@@ -392,13 +385,13 @@ GstBrowser.FileBrowser = function (config) {
             });
             nodeFolder.querySelector('[data-file="' + selectedFile.name + '"]').classList.add('selected');
         }
-    };
+    },
 
-    var mkDir = function () {
+    mkDir = function () {
         ajaxSend('mkdir', 'dir=' + panelMkDir.querySelector('input[name="newdir"]').value, handleResponseMkDir);
-    };
+    },
 
-    var handleResponseMkDir = function (data) {
+    handleResponseMkDir = function (data) {
         if (data.status === 'OK') {
             tree = data.tree;
             files = data.files;
@@ -408,13 +401,13 @@ GstBrowser.FileBrowser = function (config) {
             return;
         }
         showErr('ErrMkDir' + data.err);
-    };
+    },
 
-    var del = function () {
+    del = function () {
         ajaxSend('delete', 'name=' + selectedFile.name, handleResponseDelete);
-    };
+    },
 
-    var handleResponseDelete = function (data) {
+    handleResponseDelete = function (data) {
         if (data.status === 'OK') {
             files = data.files;
             if (data.tree !== undefined) {
@@ -428,13 +421,13 @@ GstBrowser.FileBrowser = function (config) {
             return;
         }
         showErr('ErrDelete' + data.err);
-    };
+    },
 
-    var rename = function () {
+    rename = function () {
         ajaxSend('rename', 'old=' + selectedFile.name + '&new=' + panelRename.querySelector('input[name="new"]').value, handleResponseRename);
-    };
+    },
 
-    var handleResponseRename = function (data) {
+    handleResponseRename = function (data) {
         if (data.status === 'OK') {
             files = data.files;
             if (data.tree !== undefined) {
@@ -447,13 +440,13 @@ GstBrowser.FileBrowser = function (config) {
             return;
         }
         showErr('ErrRename' + data.err);
-    };
+    },
 
-
-    var copy = function () {
+    copy = function () {
         ajaxSend(panelCopy.querySelector('[name="action"]').value, 'old=' + selectedFile.name + '&new=' + panelCopy.querySelector('input[name="new"]').value, handleResponseCopy);
-    };
-    var handleResponseCopy = function (data) {
+    },
+
+    handleResponseCopy = function (data) {
         if (data.status === 'OK') {
             if (data.tree !== undefined) {
                 tree = data.tree;
@@ -467,28 +460,28 @@ GstBrowser.FileBrowser = function (config) {
             return;
         }
         showErr('ErrCopy' + data.err);
-    };
+    },
 
-    var formatFilesize = function (bytes) {
+    formatFilesize = function (bytes) {
         var sizes = ['B', 'kB', 'MB', 'GB', 'TB'], i;
         if (bytes <= 0) {
             return '0 B';
         }
-        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
         return Math.round(bytes / Math.pow(1024, i), 2)  +  ' '  +  sizes[[i]];
-    };
+    },
 
-    var formatShortDateTime = function (date) {
+    formatShortDateTime = function (date) {
         var time = date.toLocaleTimeString();
         time = time.substr(0, time.length-3);
         return date.getDate() + '.' + (date.getMonth()  +  1) + '.' + date.getFullYear() + ' ' + time;
-    };
+    },
 
-    var translate = function (token) {
+    translate = function (token) {
         return (GstBrowser.Translations[token] === undefined ? token : GstBrowser.Translations[token]);
-    };
+    },
 
-    var translatePage = function () {
+    translatePage = function () {
         Array.prototype.forEach.call(document.querySelectorAll('.i18n'), function (el) {
             el.innerHTML = translate(el.innerHTML);
             if (el.title !== '') {
@@ -498,20 +491,20 @@ GstBrowser.FileBrowser = function (config) {
                 el.placeholder = translate(el.placeholder);
             }
         });
-    };
+    },
 
-    var showErr = function (msg) {
+    showErr = function (msg) {
         nodeMsg.querySelector('span').innerHTML = translate(msg);
         nodeMsg.classList.remove('hidden');
-    };
+    },
 
-    var ajaxSend = function (action, data, callback) {
+    ajaxSend = function (action, data, callback) {
         ajaxIndicator.classList.remove('hidden');
-        var method = (action === 'tree' || action === 'files' ? 'GET' : 'POST');
-        var postdata = 'config=' + config.configServer + '&action=' + action + '&path=' + selectedPath + '&' + data;
-        var url = config.connector  +
-            (method === 'GET' ? '?config=' + config.configServer + '&action=' + action + '&path=' + selectedPath + data + '&r=' + Math.random() : '');
-        var xhr = new XMLHttpRequest;
+        var method = (action === 'tree' || action === 'files' ? 'GET' : 'POST'),
+        postdata = 'config=' + config.configServer + '&action=' + action + '&path=' + selectedPath + '&' + data,
+        url = config.connector  +
+            (method === 'GET' ? '?config=' + config.configServer + '&action=' + action + '&path=' + selectedPath + data + '&r=' + Math.random() : ''),
+        xhr = new XMLHttpRequest;
 
         xhr.onreadystatechange = function () {
             if (this.readyState === 4) {
@@ -542,9 +535,9 @@ GstBrowser.FileBrowser = function (config) {
         } else {
             xhr.send(postdata);
         }
-    };
+    },
 
-    var handlePassUrl = function () {
+    handlePassUrl = function () {
         if (selectedFile.type === 'dir') {
             setPath(selectedPath + '/' + selectedFile.name);
             return;
@@ -555,7 +548,106 @@ GstBrowser.FileBrowser = function (config) {
                 config.callbackSubmit(config.baseUrl + '/' + selectedPath + (selectedPath !== '' ? '/' : '') + selectedFile.name);
             }
         }
+    },
 
+    uploadFiles = function (files) {
+        var i, fd, xhr;
+        for (i = 0; i < files.length; i++) {
+            if (config.uploadAccept !== '' && config.uploadAccept.indexOf(files[i].type) === -1) {
+                addUploadRow('', files[i].name, files[i].size, '0%', translate('ErrUploadInvalidType'));
+                continue;
+            }
+            if (config.uploadMaxSize !== null && files[i].size > config.uploadMaxSize) {
+                addUploadRow('', files[i].name, files[i].size, '0%', translate('ErrUploadInvalidSize'));
+                continue;
+            }
+
+            fd = new FormData();
+            fd.append('file', files[i]);
+            fd.append('config', config.configServer);
+            fd.append('action', 'upload');
+            fd.append('path', selectedPath);
+
+            xhr = new XMLHttpRequest();
+            xhr.upload.addEventListener('loadstart', handleUploadStart, false);
+            // anonymous fuction is quicker than addEventListener with named function
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    var percentComplete = Math.round(e.loaded * 100 / e.total),
+                    uploadProgressElement = document.getElementById(this.uploadId).querySelector('td.progress');
+                    uploadProgressElement.innerHTML = percentComplete.toString()  +  '%';
+                }
+            };
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        handleUploadEnd(this);
+                    } else {
+                        handleUploadError(this);
+                    }
+                }
+            };
+            xhr.upload.timeout = 60000;
+            xhr.upload.ontimeout = function () {
+                handleUploadError(xhr);
+            };
+
+            xhr.upload.uploadId = files[i].name  +  ''  + files[i].size;
+            xhr.upload.file = files[i];
+
+            xhr.open('POST', config.connector, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader('Cache-Control','no-cache');
+            xhr.setRequestHeader('Connection', 'close');
+            xhr.send(fd);
+        }
+    },
+
+    handleUploadStart = function () {
+        addUploadRow(this.uploadId, this.file.name, this.file.size, '0%', '');
+    },
+
+    addUploadRow = function (rowId, fileName, fileSize, progress, result) {
+        var row = progressUpload.insertRow(0), cell1, cell2, cell3, cell4;
+        row.id = rowId;
+        cell1 = row.insertCell(0);
+        cell1.innerHTML = fileName;
+        cell2 = row.insertCell(1);
+        cell2.innerHTML = formatFilesize(fileSize);
+        cell3 = row.insertCell(2);
+        cell3.innerHTML = progress;
+        cell3.className = 'progress';
+        cell4 = row.insertCell(3);
+        cell4.className = 'result';
+        cell4.innerHTML = result;
+    },
+
+    handleUploadEnd = function (xhr) {
+        var data, uploadProgressElement, uploadStatus;
+        try {
+            data = JSON.parse(xhr.responseText);
+        } catch(e) {
+             handleUploadError(xhr, 'ErrUpload');
+             return;
+        }
+
+        if (data.status === 'OK') {
+            uploadProgressElement = document.getElementById(xhr.upload.uploadId).querySelector('td.progress');
+            uploadStatus = document.getElementById(xhr.upload.uploadId).querySelector('td.result');
+            uploadProgressElement.innerHTML = '100%';
+            uploadStatus.innerHTML = 'OK';
+            files = data.files;
+            refreshFiles();
+            return;
+        }
+        handleUploadError(xhr, translate('ServerErrorCode' + data.err));
+    },
+
+    handleUploadError = function (xhr, customMsg) {
+        var uploadStatus = document.getElementById(xhr.upload.uploadId).querySelector('td.result');
+        uploadStatus.classList.add('error');
+        uploadStatus.innerHTML = translate(typeof customMsg === 'undefined' ? xhr.statusText : customMsg);
     };
 
     butOk.addEventListener('mousedown', handlePassUrl);
@@ -620,13 +712,13 @@ GstBrowser.FileBrowser = function (config) {
 
     butUpload.addEventListener('mousedown', function () {
         progressUpload.innerHTML = '';
-        var newInput = document.createElement('input');
+        var newInput = document.createElement('input'), inputFile;
         newInput.type = 'file';
         newInput.accept = config.uploadAccept;
         newInput.multiple = true;
         newInput.id = 'fldUpload';
 
-        var inputFile = panelUpload.querySelector('[type="file"]');
+        inputFile = panelUpload.querySelector('[type="file"]');
         inputFile.parentNode.replaceChild(newInput, inputFile);
 
         newInput.addEventListener('change', function () {
@@ -643,104 +735,6 @@ GstBrowser.FileBrowser = function (config) {
         nodeMsg.classList.add('hidden');
     });
 
-    var uploadFiles = function (files) {
-        for (var i = 0; i < files.length; i++) {
-            if (config.uploadAccept !== '' && config.uploadAccept.indexOf(files[i].type) === -1) {
-                addUploadRow('', files[i].name, files[i].size, '0%', translate('ErrUploadInvalidType'));
-                continue;
-            }
-            if (config.uploadMaxSize !== null && files[i].size > config.uploadMaxSize) {
-                addUploadRow('', files[i].name, files[i].size, '0%', translate('ErrUploadInvalidSize'));
-                continue;
-            }
-
-            var fd = new FormData();
-            fd.append('file', files[i]);
-            fd.append('config', config.configServer);
-            fd.append('action', 'upload');
-            fd.append('path', selectedPath);
-            var xhr = new XMLHttpRequest();
-
-            xhr.upload.addEventListener('loadstart', handleUploadStart, false);
-            // anonymous fuction is quicker than addEventListener with named function
-            xhr.upload.onprogress = function (e) {
-                if (e.lengthComputable) {
-                    var percentComplete = Math.round(e.loaded * 100 / e.total);
-                    var uploadProgressElement = document.getElementById(this.uploadId).querySelector('td.progress');
-                    uploadProgressElement.innerHTML = percentComplete.toString()  +  '%';
-                }
-            };
-
-            xhr.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        handleUploadEnd(this);
-                    } else {
-                        handleUploadError(this);
-                    }
-                }
-            };
-            xhr.upload.timeout = 60000;
-            xhr.upload.ontimeout = function () {
-                handleUploadError(xhr);
-            };
-
-            xhr.upload.uploadId = files[i].name  +  ''  + files[i].size;
-            xhr.upload.file = files[i];
-
-            xhr.open('POST', config.connector, true);
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            xhr.setRequestHeader('Cache-Control','no-cache');
-            xhr.setRequestHeader('Connection', 'close');
-            xhr.send(fd);
-        }
-    };
-
-    var handleUploadStart = function () {
-        addUploadRow(this.uploadId, this.file.name, this.file.size, '0%', '');
-    };
-
-    var addUploadRow = function (rowId, fileName, fileSize, progress, result) {
-        var row = progressUpload.insertRow(0);
-        row.id = rowId;
-        var cell1 = row.insertCell(0);
-        cell1.innerHTML = fileName;
-        var cell2 = row.insertCell(1);
-        cell2.innerHTML = formatFilesize(fileSize);
-        var cell3 = row.insertCell(2);
-        cell3.innerHTML = progress;
-        cell3.className = 'progress';
-        var cell4 = row.insertCell(3);
-        cell4.className = 'result';
-        cell4.innerHTML = result;
-    };
-
-    var handleUploadEnd = function (xhr) {
-        try {
-            var data = JSON.parse(xhr.responseText);
-        } catch(e) {
-             handleUploadError(xhr, 'ErrUpload');
-             return;
-        }
-
-        if (data.status === 'OK') {
-            var uploadProgressElement = document.getElementById(xhr.upload.uploadId).querySelector('td.progress');
-            uploadProgressElement.innerHTML = '100%';
-            var uploadStatus = document.getElementById(xhr.upload.uploadId).querySelector('td.result');
-            uploadStatus.innerHTML = 'OK';
-            files = data.files;
-            refreshFiles();
-            return;
-        }
-        handleUploadError(xhr, translate('ServerErrorCode' + data.err));
-    };
-
-    var handleUploadError = function (xhr, customMsg) {
-        var uploadStatus = document.getElementById(xhr.upload.uploadId).querySelector('td.result');
-        uploadStatus.classList.add('error');
-        uploadStatus.innerHTML = translate(typeof customMsg === 'undefined' ? xhr.statusText : customMsg);
-    };
-
     // drag drop upload in folder
     nodeFolder.ondragover = function (e) {
         e.preventDefault();
@@ -749,7 +743,7 @@ GstBrowser.FileBrowser = function (config) {
 
     nodeFolder.addEventListener('drop', function (event) {
         event.preventDefault();
-        if (event.dataTransfer.files.lenth > 0) {
+        if (event.dataTransfer.files.length > 0) {
             panelUpload.classList.remove('hidden');
             uploadFiles(event.dataTransfer.files);
         }
