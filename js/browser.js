@@ -327,26 +327,22 @@ GstBrowser.FileBrowser = function (config) {
         // unfold branches
         nodeTree.querySelector('ul li').classList.remove('collapsed');
         var parts = selectedPath.split('/');
-
+        var selector = '';
         for (var i=0; i<parts.length; i++) {
-            var selector = 'ul';
-            for (var y=0; y<i; y++) {
-                selector += ' ul';
-            }
-            nodeTree.querySelector(selector + ' li[data-path="' + parts[y] + '"]').classList.remove('collapsed');
+            selector += '[data-path="' + parts[i] +'"] ';
         }
+        nodeTree.querySelector(selector).classList.remove('collapsed');
 
         // highlight tree item
         if (selectedPath === '') {
             nodeTree.querySelector('ul li[data-path=""] span.folder').classList.add('selected');
         } else {
-            selector = 'ul';
-            for(var y=0; y<parts.length-1; y++) {
-                selector += ' ul';
+            selector = '';
+            for (var i=0; i<parts.length; i++) {
+                selector += '[data-path="' + parts[i] +'"] ';
             }
-            nodeTree.querySelector(selector + ' li[data-path="' + parts[parts.length-1] + '"] span.folder').classList.add('selected');
+            nodeTree.querySelector(selector + ' span.folder').classList.add('selected');
         }
-
 
         Array.prototype.forEach.call(document.querySelectorAll('[data-showpath]'), function (el) {
             el.innerHTML = selectedPath;
