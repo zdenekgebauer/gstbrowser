@@ -19,6 +19,12 @@ p.msieWarning {position: absolute;font-weight:bold; }
 
 .hidden { display: none;}
 
+#ajaxIndicator {
+    position: absolute;
+    background: red;
+    width:100%; height:1px;
+}
+
 #header {
 width:100%; height:2.5rem;
 font-size: .8rem;

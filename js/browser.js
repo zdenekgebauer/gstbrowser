@@ -69,6 +69,7 @@ GstBrowser.FileBrowser = function (config) {
         nodeFilter = document.getElementById('fldFilter'),
         nodeSelFile = document.getElementById('selectedFile'),
         nodeMsg = document.getElementById('msg'),
+        ajaxIndicator = document.getElementById('ajaxIndicator'),
 
         butRename = document.getElementById('butRename'),
         butCopy = document.getElementById('butCopy'),
@@ -505,6 +506,7 @@ GstBrowser.FileBrowser = function (config) {
     };
 
     var ajaxSend = function (action, data, callback) {
+        ajaxIndicator.classList.remove('hidden');
         var method = (action === 'tree' || action === 'files' ? 'GET' : 'POST');
         var postdata = 'config=' + config.configServer + '&action=' + action + '&path=' + selectedPath + '&' + data;
         var url = config.connector  +
@@ -514,6 +516,7 @@ GstBrowser.FileBrowser = function (config) {
         xhr.onreadystatechange = function () {
             if (this.readyState === 4) {
                 if (this.status === 200) {
+                    ajaxIndicator.classList.add('hidden');
                     try {
                         var data = JSON.parse(this.responseText);
                     } catch(e) {
@@ -528,6 +531,7 @@ GstBrowser.FileBrowser = function (config) {
         };
         //xhr.timeout = 10000;
         xhr.ontimeout = function () {
+            ajaxIndicator.classList.add('hidden');
             showErr('ErrLoadTimeout');
         };
 
