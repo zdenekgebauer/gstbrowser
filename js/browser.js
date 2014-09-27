@@ -114,7 +114,7 @@ GstBrowser.FileBrowser = function (config) {
     refreshTree =  function () {
         var hasChildren = (tree[0].children !== undefined),
         html = '<ul><li data-path="" class="collapsed' + (!hasChildren ? ' noSubfolder' : '') + '">' + (hasChildren ? '<span class="expand"> + </span>' : '')
-             + '<span class="folder">' + tree[0].name + '</span>', i;
+             + '<span class="folder" title="' + translate ('Drag files here for upload') + '">' + tree[0].name + '</span>', i;
         if (hasChildren) {
             for (i=0; i<tree[0].children.length; i++ ) {
                 html  += formatTreeItem(tree[0].children[i]);
@@ -191,7 +191,7 @@ GstBrowser.FileBrowser = function (config) {
         if (hasChildren) {
             ret  += '<span class="expand"> + </span>';
         }
-        ret  += '<span class="folder">' + treeItem.name + '</span>';
+        ret  += '<span class="folder" title="' + translate ('Drag files here for upload') + '">' + treeItem.name + '</span>';
         if (hasChildren) {
             ret  += '<ul>';
             for (y=0;y<treeItem.children.length; y++) {
@@ -489,6 +489,9 @@ GstBrowser.FileBrowser = function (config) {
             }
             if (typeof el.placeholder !== 'undefined') {
                 el.placeholder = translate(el.placeholder);
+            }
+            if (typeof el.title !== 'undefined') {
+                el.title = translate(el.title);
             }
         });
     },
