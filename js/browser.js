@@ -325,6 +325,7 @@ GstBrowser.FileBrowser = function (config) {
         });
 
         // unfold branches
+        nodeTree.querySelector('ul li').classList.remove('collapsed');
         var parts = selectedPath.split('/');
 
         for (var i=0; i<parts.length; i++) {
@@ -405,6 +406,7 @@ GstBrowser.FileBrowser = function (config) {
             tree = data.tree;
             files = data.files;
             refreshTree();
+            setPath(selectedPath);
             panelMkDir.classList.add('hidden');
             return;
         }
