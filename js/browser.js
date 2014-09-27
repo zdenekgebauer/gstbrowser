@@ -114,7 +114,7 @@ GstBrowser.FileBrowser = function (config) {
 
     var refreshTree =  function () {
         var hasChildren = (tree[0].children !== undefined);
-        var html = '<ul><li data-path="" class="collapsed' + (!hasChildren ? 'noSubfolder' : '') + '">' + (hasChildren ? '<span class="expand"> + </span>' : '')
+        var html = '<ul><li data-path="" class="collapsed' + (!hasChildren ? ' noSubfolder' : '') + '">' + (hasChildren ? '<span class="expand"> + </span>' : '')
              + '<span class="folder">' + tree[0].name + '</span>';
         if (hasChildren) {
             for (var i=0; i<tree[0].children.length; i++ ) {
